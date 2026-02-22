@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Bedrock Add-on — Cuddly Doodle</title>
+  <style>
+    body{margin:0;font-family:Inter,system-ui,Arial;background:linear-gradient(180deg,#071019,#0f1720);color:#e6eef8;min-height:100vh}
+    .container{max-width:900px;margin:36px auto;padding:20px}
+    h1{margin:0 0 6px}
+    p.lead{color:#bdbdbd}
+    pre{background:#071724;padding:12px;border-radius:8px;overflow:auto}
+    .btn{background:#4caf50;color:#04210b;padding:8px 12px;border-radius:8px;text-decoration:none}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="index.html">← Back</a>
+    <h1>Bedrock Add-on (Cosmetic Skeleton)</h1>
+    <p class="lead">This folder contains a minimal `manifest.json`. Add textures, models, or behavior files to customize. Packaging instructions are below.</p>
+
+    <h2>Files</h2>
+    <ul>
+      <li><a href="bedrock-addon/manifest.json">bedrock-addon/manifest.json</a></li>
+      <li><a href="bedrock-addon/README.md">bedrock-addon/README.md</a></li>
+    </ul>
+
+    <h2>Packaging (.mcpack)</h2>
+    <p>To create a .mcpack you can open in Minecraft Bedrock:</p>
+    <pre>zip -r addon.zip *
+mv addon.zip my-addon.mcpack
+open my-addon.mcpack on your Bedrock device</pre>
+
+    <p style="color:#bdbdbd">Note: Update UUIDs in `manifest.json` to unique values before publishing.</p>
+  </div>
+</body>
+</html>

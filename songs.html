@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Song Player — Cuddly Doodle</title>
+  <style>
+    :root{--accent:#4caf50;--muted:#bdbdbd}
+    body{margin:0;font-family:Inter,system-ui,Arial;background:linear-gradient(180deg,#071019,#0f1720);color:#e6eef8;min-height:100vh}
+    .container{max-width:900px;margin:36px auto;padding:20px}
+    h1{margin:0 0 6px}
+    p.lead{color:var(--muted)}
+    .song-list{list-style:none;padding:0;margin:18px 0}
+    .song-item{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:8px;background:rgba(255,255,255,0.02);margin-top:8px}
+    .btn{background:var(--accent);color:#04210b;padding:8px 12px;border-radius:8px;text-decoration:none;font-weight:600;border:none}
+    a.download{color:var(--accent);text-decoration:none;margin-left:8px}
+    audio{width:100%;margin-top:12px}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="index.html">← Back</a>
+    <h1>Song Player & Downloads</h1>
+    <p class="lead">Play royalty-free tracks here or open official platform links for copyrighted songs.</p>
+
+    <audio id="audio" controls preload="none"></audio>
+    <ul id="songs" class="song-list"></ul>
+
+    <p style="color:var(--muted);margin-top:18px">Place your own files in <code>assets/songs/</code> and add entries to <code>assets/songs/songs.json</code>.</p>
+  </div>
+
+  <script>
+  async function loadSongs(){
+    try{
+      const res = await fetch('assets/songs/songs.json');
+      const songs = await res.json();
+      const list = document.getElementById('songs');
+      const audio = document.getElementById('audio');
+      list.innerHTML = '';
+      let currentIndex = -1;
+
+      function playIndex(i){
+        if(!songs[i].url) return;
+        currentIndex = i;
+        audio.src = songs[i].url;
+        audio.play();
+      }
+
+      songs.forEach((s, i) => {
+        const li = document.createElement('li');
+        li.className = 'song-item';
+        const left = document.createElement('div');
+        left.innerHTML = `<strong>${s.title}</strong><br><small style="color:var(--muted)">${s.artist}</small>`;
+        const right = document.createElement('div');
+
+        if(s.url){
+          const playBtn = document.createElement('button');
+          playBtn.className = 'btn';
+          playBtn.textContent = 'Play';
+          playBtn.onclick = () => playIndex(i);
+          const dl = document.createElement('a');
+          dl.className = 'download';
+          dl.href = s.url;
+          dl.download = s.filename || '';
+          dl.textContent = 'Download';
+          right.appendChild(playBtn);
+          right.appendChild(dl);
+        } else if(s.platform_url){
+          const open = document.createElement('a');
+          open.className = 'btn';
+          open.href = s.platform_url;
+          open.target = '_blank';
+          open.rel = 'noopener';
+          open.textContent = 'Open';
+          right.appendChild(open);
+        } else {
+          right.textContent = 'No preview';
+        }
+
+        li.appendChild(left);
+        li.appendChild(right);
+        list.appendChild(li);
+      });
+
+      if(songs.length && songs[0].url){
+        audio.src = songs[0].url;
+      }
+    }catch(err){
+      console.error(err);
+      document.getElementById('songs').innerHTML = '<li style="color:#f88">Unable to load song list.</li>';
+    }
+  }
+
+  loadSongs();
+  </script>
+</body>
+</html>
